@@ -4,25 +4,24 @@ import java.util.List;
 
 public class Question {
     private int upvote;
-    private String question;
+    private String description;
     private List<Answer> answers;
     private LoggedInUser loggedInUser;
     private List<Topic> topic;
     private String timestamp;
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
 
     public Question(List<Answer> answers, LoggedInUser loggedInUser, List<Topic> topic, String timestamp) {
         this.answers = answers;
         this.loggedInUser = loggedInUser;
         this.topic = topic;
         this.timestamp = timestamp;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setUpvote(int upvote) {

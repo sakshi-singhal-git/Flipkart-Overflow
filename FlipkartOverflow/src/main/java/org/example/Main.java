@@ -3,10 +3,7 @@ package org.example;
 import org.example.model.LoggedInUser;
 import org.example.service.OverflowService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,22 +11,24 @@ public class Main {
         OverflowService overflowService = new OverflowService();
 
         //login user
-        overflowService.login(new LoggedInUser(1, "Sachin", "developer"));
+        LoggedInUser loggedInUser = new LoggedInUser(1, "Sachin", "developer");
+        overflowService.login(loggedInUser);
+        overflowService.loggedOut(loggedInUser);
 
-        overflowService.loggedOut(new LoggedInUser(1, "Sachin", "developer"));
-        overflowService.login(new LoggedInUser(1, "Sakshi", "developer"));
+        loggedInUser = new LoggedInUser(1, "Sakshi", "developer");
+        overflowService.login(loggedInUser);
         //subscribe to topic
-        List<String> topic = new ArrayList<>();
+        Set<String> topic = new HashSet<>();
         topic.add("Java");
         topic.add("Hadoop");
         topic.add("jdk");
-        overflowService.subsribe(topic);
+        overflowService.subsribe(topic, loggedInUser);
 
         List<String> singletonList = Collections.singletonList("Java");
-        overflowService.unsubscribe(singletonList);
+        overflowService.unsubscribe(singletonList, loggedInUser);
 
-   //     overflowService.showFeed();
+        overflowService.showFeed();
 
-        overflowService.showFeed("Java");
+        overflowService.showFeed(Arrays.asList("Java"));
     }
 }
