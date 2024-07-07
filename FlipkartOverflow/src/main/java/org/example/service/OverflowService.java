@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.Exception.*;
 import org.example.model.*;
+import org.example.print.Console;
 import org.example.print.Print;
 
 import javax.lang.model.type.ArrayType;
@@ -13,20 +14,21 @@ import java.util.Map;
 public class OverflowService {
     Question question;
     Answer answer;
-    Print print;
-    HashMap<Integer, LoggedInUser> loggedUser;
-    HashMap<Integer, User> loggedOutUser;
-    HashMap<LoggedInUser, List<Topic>> subsribe;
-    HashMap<Topic, Feed> allFeeds;
-    List<String> topics;
+    Print print = new Console();
+    HashMap<Integer, LoggedInUser> loggedUser = new HashMap<>();
+//    HashMap<Integer, User> loggedOutUser;
+//    HashMap<LoggedInUser, List<Topic>> subsribe = new HashMap<>();
+    HashMap<Topic, Feed> allFeeds = new HashMap<>();
+    List<String> topics = new ArrayList<>();
 
     public void login(LoggedInUser loggedInUser)
     {
-        if(!loggedUser.containsKey(loggedInUser.getUserId()))
+        if(loggedUser.containsKey(loggedInUser.getUserId()))
         {
             throw new UserAlreadyRegistered();
         }
         loggedUser.put(loggedInUser.getUserId(), loggedInUser);
+        print.print("User logged in successfully");
     }
 
     public void loggedOut(LoggedInUser loggedInUser)
@@ -35,40 +37,48 @@ public class OverflowService {
         {
             throw new UserAlreadyLoggedOut();
         }
-        loggedUser.remove(loggedInUser);
+        loggedUser.remove(loggedInUser.getUserId());
         print.print("User logged out successfully");
 
     }
-    public void subsribeTopic(Topic topic, LoggedInUser loggedInUser)
-    {
-        if(subsribe.containsKey(loggedInUser))
-        {
-            List<Topic> subscribed = subsribe.get(loggedInUser);
-            if(subscribed.contains(topic))
-            {
-                throw new UserAlreadySubsribedToTopic();
-            }
-        }
-        if(!subsribe.containsKey(loggedInUser))
-            subsribe.put(loggedInUser,new ArrayList<>());
-        subsribe.get(loggedInUser).add(topic);
-        print.print("User subscribe to topic");
-    }
+//    public void subsribeTopic(Topic topic, LoggedInUser loggedInUser)
+//    {
+//        if(subsribe.containsKey(loggedInUser))
+//        {
+//            List<Topic> subscribed = subsribe.get(loggedInUser);
+//            if(subscribed.contains(topic))
+//            {
+//                throw new UserAlreadySubsribedToTopic();
+//            }
+//        }
+//        if(!subsribe.containsKey(loggedInUser))
+//            subsribe.put(loggedInUser,new ArrayList<>());
+//        subsribe.get(loggedInUser).add(topic);
+//        print.print("User subscribe to topic");
+//    }
 
-    public void unsubscribe(Topic topic, LoggedInUser loggedInUser)
+    public void unsubscribe(List<String> listOfTopics)
     {
-        if(subsribe.containsKey(loggedInUser))
+        for(String topic: listOfTopics)
         {
-            List<Topic> subscribed = subsribe.get(loggedInUser);
-            if(!subscribed.contains(topic))
-            {
+            if(!topics.contains(topic)){
                 throw new UserNotSubsribedToTheTopic();
             }
+            else topics.remove(topic);
         }
-        List<Topic> subscribed = subsribe.get(loggedInUser);
-        subscribed.remove(topic);
         print.print("User unsubscribe from topic");
     }
+//        if(subsribe.containsKey(loggedInUser))
+//        {
+//            List<Topic> subscribed = subsribe.get(loggedInUser);
+//            if(!subscribed.contains(topic))
+//            {
+//                throw new UserNotSubsribedToTheTopic();
+//            }
+//        }
+//        List<Topic> subscribed = subsribe.get(loggedInUser);
+//        subscribed.remove(topic);
+//
 
     public void subsribe(List<String> topic)
     {
@@ -79,6 +89,7 @@ public class OverflowService {
                 throw new TopicAlreadyPresent();
             }
         }
+        print.print("Subscribed to the topic");
     }
 
     public void showFeed()
@@ -96,7 +107,7 @@ public class OverflowService {
 
     public void showFeed(String topic)
     {
-        if(allFeeds.containsKey(topic))
+        if(!allFeeds.containsKey(topic))
             throw new NoFeedExists();
         else{
             Feed f = allFeeds.get(topic);

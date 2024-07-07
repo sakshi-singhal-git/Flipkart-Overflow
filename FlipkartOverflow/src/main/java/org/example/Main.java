@@ -5,6 +5,7 @@ import org.example.service.OverflowService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -24,7 +25,10 @@ public class Main {
         topic.add("jdk");
         overflowService.subsribe(topic);
 
-        overflowService.showFeed();
+        List<String> singletonList = Collections.singletonList("Java");
+        overflowService.unsubscribe(singletonList);
+
+   //     overflowService.showFeed();
 
         overflowService.showFeed("Java");
     }
